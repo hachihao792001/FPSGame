@@ -1,0 +1,167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4246350279071855233
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4246350279071690401}
+  - component: {fileID: 4246350279071855261}
+  - component: {fileID: 4246350279068790401}
+  - component: {fileID: 4246350279069920321}
+  - component: {fileID: 4246350279071855262}
+  - component: {fileID: 4246350279071855260}
+  - component: {fileID: 4246350279071855263}
+  m_Layer: 0
+  m_Name: BaseballBat
+  m_TagString: Weapon
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4246350279071690401
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4246350279071855233}
+  m_LocalRotation: {x: -0.00000007092751, y: 0.378778, z: 0.9254876, w: 0.00000017330079}
+  m_LocalPosition: {x: -3.86, y: 0.059000015, z: 0.444}
+  m_LocalScale: {x: 1.491592, y: 1.6815856, z: 25.823488}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -135.484, y: 180, z: -0.000015258789}
+--- !u!114 &4246350279071855261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4246350279071855233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 674f81ac052bed047a1f92b2994bda4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Price: 40
+  ownGunScript: {fileID: 0}
+  ownMeleeScript: {fileID: 4246350279071855261}
+  ownGrenadeScript: {fileID: 0}
+  WeaponBarImage: {fileID: 0}
+  type: 3
+  holdingPos: {x: 0.3389127, y: -0.448, z: 0.5500484}
+  holdingRota: {x: -135.4, y: 180, z: -1.525}
+  damage: 30
+  rate: 0.5
+  ani: {fileID: 4246350279071855262}
+  attackSound: BaseballBatSwing
+  aniAttack: 
+  aniReload: 
+  throwForce: 300
+  throwSpinSpeed: 100
+  meleeRange: 3
+  meleeForce: 800
+  attacks:
+  - BaseballBatSwing
+  - BaseballBatDown
+  hitWallSound: BaseballBatHit
+  hitEnemySound: BaseballBatHit
+  MeleeMark: {fileID: 479099473212522997, guid: df2ec88b9b6ad4143abe70cc9fbf6699,
+    type: 3}
+--- !u!33 &4246350279068790401
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4246350279071855233}
+  m_Mesh: {fileID: 4300000, guid: 824e46b391fe06844ae4a18928f4a398, type: 3}
+--- !u!23 &4246350279069920321
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4246350279071855233}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 2eb5de88266cb5540886e097508249fe, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!111 &4246350279071855262
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4246350279071855233}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 6261b7fc888330249ba3a62ba839e269, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 6261b7fc888330249ba3a62ba839e269, type: 2}
+  - {fileID: 7400000, guid: b88e36442636f084791ea90143aea9ca, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
+--- !u!54 &4246350279071855260
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4246350279071855233}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
+--- !u!64 &4246350279071855263
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4246350279071855233}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300000, guid: 824e46b391fe06844ae4a18928f4a398, type: 3}
