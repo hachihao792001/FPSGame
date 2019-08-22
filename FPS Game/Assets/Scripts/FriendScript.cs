@@ -46,7 +46,7 @@ public class FriendScript : MonoBehaviour
             tick += Time.deltaTime;
             if (tick >= rate)
             {
-                GameManager.audioM.PlayAudioObj(fireSound, transform).GetComponent<AudioSource>().Play();
+                GameManager.audioM.PlaySound(fireSound, transform, 1, 20, OptionScreenScript.weaponSound);
                 GameObject currentBullet = Instantiate(Bullet, BulletParent);
                 currentBullet.transform.rotation = FireBullet.transform.rotation;
                 currentBullet.SendMessage("setDamage", damage);
@@ -64,14 +64,17 @@ public class FriendScript : MonoBehaviour
             animator.SetBool("HasTarget", false);
             transform.LookAt(new Vector3(PlayerBody.position.x, transform.position.y, PlayerBody.position.z));
 
+            GameObject closest = null;
             foreach (Collider c in Physics.OverlapSphere(transform.position, detectRadius))
             {
                 if (c.tag == "Enemy")
                 {
-                    Target = c.gameObject;
-                    break;
+                    if (closest == null) closest = c.gameObject;
+                    else if (Vector3.Distance(transform.position, c.transform.position) < Vector3.Distance(transform.position, closest.transform.position))
+                        closest = c.gameObject;
                 }
             }
+            Target = closest;
         }
 
         animator.SetFloat("PlayerDistance", currentPlayerDistance);
@@ -90,5 +93,10 @@ public class FriendScript : MonoBehaviour
 
         float healthScale = (float)currentHealth / fullHealth;
         HealthPivot.localScale = new Vector3(healthScale, 1, 1);
+    }
+
+    public void ShopOnClick()
+    {
+        FindObjectOfType<ShopManager>().ItemShopOnClick(gameObject, false, 500);
     }
 }

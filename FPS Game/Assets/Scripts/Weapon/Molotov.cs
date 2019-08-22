@@ -23,6 +23,9 @@ public class Molotov : Weapon
             WeaponBarImage = FindObjectOfType<WeaponManager>().GetWeaponBarImage(name.Substring(0, name.Length - 7));
         else
             WeaponBarImage = FindObjectOfType<WeaponManager>().GetWeaponBarImage(name);
+
+        Physics.IgnoreCollision(GetComponent<Collider>(), FPS.transform.parent.GetComponent<Collider>());
+
     }
 
     public override void Attack()
@@ -39,7 +42,7 @@ public class Molotov : Weapon
         GetComponent<Rigidbody>().isKinematic = false;
         GetComponent<Collider>().enabled = true;
         GetComponent<Rigidbody>().AddForce(gm.FPS.transform.forward * molThrowForce);
-        GameManager.audioM.PlayAudioObj(throwMol, transform).GetComponent<AudioSource>().Play();
+        GameManager.audioM.PlaySound(throwMol, transform, 1f, 5, OptionScreenScript.weaponSound);
         thrown = true;
         FindObjectOfType<WeaponManager>().weaponInSlot[4] = null;
 

@@ -4780,4 +4780,4 @@ MonoBehaviour:
   damage: 40
   force: 3000
   timeToDisappear: 5
-  sound: Explode
+  sound: FleshExplode

@@ -35,4 +35,9 @@ public class ExplodingBarrelScript : MonoBehaviour
         GetComponent<Collider>().enabled = true;
         transform.parent = null;
     }
+
+    public void ShopOnClick()
+    {
+        FindObjectOfType<ShopManager>().ItemShopOnClick(gameObject, false, 50);
+    }
 }

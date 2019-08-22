@@ -1,6 +1,2 @@
-Round spawner
 Map
-Enemy sound
-Different explosion
 Menu
-Adding new items to shop(Exploding Barrel, Turret, Mines, Bazooka, Armor, Friend, Emergency)

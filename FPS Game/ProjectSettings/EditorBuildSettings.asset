@@ -9,6 +9,18 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/FPS_Game.unity
+    path: Assets/Scenes/Menu.unity
+    guid: 55fbffe5f0f97f942bb943f62fa055fb
+  - enabled: 1
+    path: Assets/Scenes/Plain.unity
     guid: 21d434e513455ca4892c6b275b4491d4
+  - enabled: 1
+    path: Assets/Scenes/Sand.unity
+    guid: 6737873bee5e740499b4c287c2665191
+  - enabled: 1
+    path: Assets/Scenes/Abandoned.unity
+    guid: f179c123dba3f9a4aa7e0e3fa5bb0717
+  - enabled: 1
+    path: Assets/Scenes/Mountainous.unity
+    guid: c4e9032ce51b9e24584e42f7cf28cb1a
   m_configObjects: {}

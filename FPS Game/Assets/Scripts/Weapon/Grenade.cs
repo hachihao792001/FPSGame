@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Grenade : Weapon
 {
+    public GameObject Explosion;
     GameManager gm;
     public float grenadeThrowForce;
     public string thrownAni;
@@ -27,6 +28,8 @@ public class Grenade : Weapon
             WeaponBarImage = FindObjectOfType<WeaponManager>().GetWeaponBarImage(name.Substring(0, name.Length - 7));
         else
             WeaponBarImage = FindObjectOfType<WeaponManager>().GetWeaponBarImage(name);
+
+        Physics.IgnoreCollision(GetComponent<Collider>(), FPS.transform.parent.GetComponent<Collider>());
     }
 
     public override void Attack()
@@ -44,7 +47,7 @@ public class Grenade : Weapon
         transform.GetChild(0).GetComponent<Collider>().enabled = true;
         GetComponent<Collider>().enabled = true;
         GetComponent<Rigidbody>().AddForce(gm.FPS.transform.forward * grenadeThrowForce);
-        GameManager.audioM.PlayAudioObj(throwGrenade, transform).GetComponent<AudioSource>().Play();
+        GameManager.audioM.PlaySound(throwGrenade, transform, 1, 5, OptionScreenScript.weaponSound);
         thrown = true;
         FindObjectOfType<WeaponManager>().weaponInSlot[4] = null;
     }
@@ -53,7 +56,13 @@ public class Grenade : Weapon
     {
         if (thrown && !exploded)
         {
-            StartCoroutine(Explode());
+            //StartCoroutine(Explode());
+            ExplosionScript e = Instantiate(Explosion, transform.position, Quaternion.identity).GetComponent<ExplosionScript>();
+            e.damage = damage;
+            e.radius = explodeRadius;
+            e.force = explodeForce;
+            e.shakeDuration = shakeDuration;
+            e.shakeMagnitude = shakeMagnitude;
             exploded = true;
         }
     }
@@ -63,6 +72,7 @@ public class Grenade : Weapon
         return (a.position - b.position).magnitude;
     }
 
+    /*
     IEnumerator Explode()
     {
         explodeEffect.SetActive(true);
@@ -90,13 +100,12 @@ public class Grenade : Weapon
                     rb.AddExplosionForce(explodeForce, transform.position, explodeRadius);
             }
         }
-        GameObject audio = GameManager.audioM.PlayAudioObj(explode, transform);
-        audio.GetComponent<AudioSource>().spatialBlend = 0.5f;
-        audio.GetComponent<AudioSource>().Play();
+        GameManager.audioM.PlaySound(explode, transform, 0.5f, 5);
 
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
+    */
 
     public override void PickUp()
     {

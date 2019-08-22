@@ -24,7 +24,7 @@ public class MoneyObj : MonoBehaviour
     IEnumerator PickedUp(GameObject hit)
     {
         hit.SendMessage("GainMoney", 10);
-        GameManager.audioM.PlayAudioObj("MoneyPickUp", transform).GetComponent<AudioSource>().Play();
+        GameManager.audioM.PlaySound("MoneyPickUp", transform, 1, 5, 1);
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }

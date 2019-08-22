@@ -4,31 +4,50 @@ using UnityEngine;
 
 public class ShopManager : MonoBehaviour
 {
+    MoneyManager moneyM;
+    AudioManager audioM;
     public string BoughtSound, NotEnoughMoneySound;
     public Transform Items;
     public float upLim, downLim, scrollSpeed;
 
-    public void UpClick()
+    private void Start()
     {
-        Items.position += Vector3.down * scrollSpeed;
-        Items.position = new Vector3(Items.position.x, Mathf.Clamp(Items.position.y, downLim, upLim), Items.position.z);
-    }
-
-    public void DownClick()
-    {
-        Items.position += Vector3.up * scrollSpeed;
-        Items.position = new Vector3(Items.position.x, Mathf.Clamp(Items.position.y, downLim, upLim), Items.position.z);
+        moneyM = FindObjectOfType<MoneyManager>();
+        audioM = FindObjectOfType<AudioManager>();
     }
 
     public void HealthOnClick()
     {
-        if (FindObjectOfType<MoneyManager>().Money >= 100 && FindObjectOfType<PlayerHealth>().currentHealth < 100)
+        if (moneyM.Money >= 100 && FindObjectOfType<PlayerHealth>().currentHealth < 100)
         {
-            FindObjectOfType<MoneyManager>().SendMessage("LostMoney", 100);
-            FindObjectOfType<AudioManager>().PlayAudioObj(BoughtSound, FindObjectOfType<GameManager>().FPS.transform).GetComponent<AudioSource>().Play();
+            moneyM.SendMessage("LostMoney", 100);
+            GameManager.audioM.PlaySound(BoughtSound, transform, 0f, 5, OptionScreenScript.shopSound);
             PlayingScript.ActionDidInShop = "BuyFirstAid";
         }
-        else FindObjectOfType<AudioManager>().PlayAudioObj(NotEnoughMoneySound, FindObjectOfType<GameManager>().FPS.transform).GetComponent<AudioSource>().Play();
+        else GameManager.audioM.PlaySound(NotEnoughMoneySound, transform, 0f, 5, OptionScreenScript.shopSound);
+    }
+
+    public void ArmorOnClick()
+    {
+        if (moneyM.Money >= 100 && FindObjectOfType<PlayerArmor>().Durability < 100)
+        {
+            moneyM.SendMessage("LostMoney", 100);
+            GameManager.audioM.PlaySound(BoughtSound, transform, 0f, 5, OptionScreenScript.shopSound);
+            FindObjectOfType<PlayerArmor>().enabled = true;
+            FindObjectOfType<PlayerArmor>().SetDurability(100);
+        }
+        else GameManager.audioM.PlaySound(NotEnoughMoneySound, transform, 0f, 5, OptionScreenScript.shopSound);
+    }
+
+    public void EmergencyOnClick()
+    {
+        if (moneyM.Money >= 450)
+        {
+            moneyM.SendMessage("LostMoney", 450);
+            GameManager.audioM.PlaySound(BoughtSound, transform, 0f, 5, OptionScreenScript.shopSound);
+            PlayingScript.ActionDidInShop = "BuyEmergency";
+        }
+        else GameManager.audioM.PlaySound(NotEnoughMoneySound, transform, 0f, 5, OptionScreenScript.shopSound);
     }
 
     public void ItemShopOnClick(GameObject item, bool isWeapon, float price)
@@ -37,7 +56,7 @@ public class ShopManager : MonoBehaviour
         if (MM.Money >= price)
         {
             MM.SendMessage("LostMoney", price);
-            FindObjectOfType<AudioManager>().PlayAudioObj(BoughtSound, FindObjectOfType<GameManager>().FPS.transform).GetComponent<AudioSource>().Play();
+            GameManager.audioM.PlaySound(BoughtSound, transform, 0f, 5, OptionScreenScript.shopSound);
             GameObject created = Instantiate(item, MM.transform.position + MM.transform.forward.normalized + Vector3.up, Quaternion.identity);
             if (isWeapon)
             {
@@ -45,6 +64,6 @@ public class ShopManager : MonoBehaviour
                 PlayingScript.Sender = created;
             }
         }
-        else FindObjectOfType<AudioManager>().PlayAudioObj(NotEnoughMoneySound, FindObjectOfType<GameManager>().FPS.transform).GetComponent<AudioSource>().Play();
+        else GameManager.audioM.PlaySound(NotEnoughMoneySound, transform, 0f, 5, OptionScreenScript.shopSound);
     }
 }

@@ -14,9 +14,8 @@ public class ZombieExplosion : MonoBehaviour
 
     private void OnEnable()
     {
-        GameObject audio = GameManager.audioM.PlayAudioObj(sound, transform);
-        audio.GetComponent<AudioSource>().spatialBlend = 0.5f;
-        audio.GetComponent<AudioSource>().Play();
+        GameManager.audioM.PlaySound(sound, transform, 0.5f, 20, OptionScreenScript.shopSound);
+
 
         foreach (Collider c in Physics.OverlapSphere(transform.position, radius))
         {

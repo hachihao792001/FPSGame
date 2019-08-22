@@ -458,16 +458,16 @@ MonoBehaviour:
   fireSound: AK47Shoot
   currentPlayerDistance: 0
   maxPlayerDistance: 3
-  moveSpeed: 2.2
+  moveSpeed: 4
   Bullet: {fileID: 2741446043811549846, guid: c15bafeeb14f5514fad6375b881191d5, type: 3}
   Target: {fileID: 0}
   BulletParent: {fileID: 0}
   Head: {fileID: 8242395610210187881}
   FireBullet: {fileID: 7337355615025998982}
-  detectRadius: 12
-  rate: 0.2
+  detectRadius: 15
+  rate: 0.15
   tick: 0
-  damage: 5
+  damage: 20
   bulletForce: 30
 --- !u!1 &1736375765687018929
 GameObject:

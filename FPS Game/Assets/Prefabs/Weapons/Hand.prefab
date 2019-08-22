@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a5bd8c2313fbc49a4e0bbd4d5e0ad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Price: 0
   ownGunScript: {fileID: 0}
   ownMeleeScript: {fileID: 0}
   ownGrenadeScript: {fileID: 0}

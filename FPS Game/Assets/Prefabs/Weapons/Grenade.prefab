@@ -376,6 +376,8 @@ MonoBehaviour:
   aniReload: 
   throwForce: 300
   throwSpinSpeed: 100
+  Explosion: {fileID: 308182465267508781, guid: a4c19889f76f2a345853dfbad8f0e368,
+    type: 3}
   grenadeThrowForce: 700
   thrownAni: ThrownGrenade
   explodeEffect: {fileID: 6714779655752837988}

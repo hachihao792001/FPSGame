@@ -42,12 +42,15 @@ public class WeaponManager : MonoBehaviour
             for (int i = 0; i < weaponInSlot.Length; i++)
             {
                 if (i != slot && weaponInSlot[i] != null)
-                {
                     weaponInSlot[i].ani.Stop();
-                    //GameManager.audioM.GetSound(weaponInSlot[i].attackSound).Stop();
-                    //if (i <= 2 && i>0)
-                     //   GameManager.audioM.GetSound(weaponInSlot[i].ownGunScript.reloadSound).Stop();
-                }
+            }
+
+            if (weaponInSlot[currentSlot] != null)
+            {
+                foreach (Transform g in weaponInSlot[currentSlot].GetComponentsInChildren<Transform>())
+                    if (g.GetComponent<AudioSource>() != null)
+                           Destroy(g.gameObject);
+                
             }
 
             currentSlot = slot;

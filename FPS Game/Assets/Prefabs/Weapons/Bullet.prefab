@@ -69,7 +69,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.03
+  m_Time: 0.04
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.01
@@ -154,8 +154,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2741446043811549846}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.68742776, y: 0.7462836, z: 1.377327}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.02}
+  m_LocalPosition: {x: 0.68742776, y: 0.7462836, z: 1.3984}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.6}
   m_Children:
   - {fileID: 2741446043450688874}
   m_Father: {fileID: 0}

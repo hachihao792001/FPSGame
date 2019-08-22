@@ -10,6 +10,7 @@ public class TurretScript : MonoBehaviour
     public Vector3 pickUpPos, pickUpRot;
     public GameObject Bullet, Target;
     public Transform BulletParent, Head, FireBullet;
+    public string fireSound;
     public float detectRadius, rate, tick, damage, bulletForce;
 
     private void Start()
@@ -28,10 +29,13 @@ public class TurretScript : MonoBehaviour
                 GameObject currentBullet = Instantiate(Bullet, BulletParent);
                 currentBullet.transform.rotation = FireBullet.transform.rotation;
                 currentBullet.SendMessage("setDamage", damage);
-                currentBullet.transform.position = FireBullet.transform.position + FireBullet.transform.forward.normalized;
+                currentBullet.transform.position = FireBullet.transform.position + FireBullet.transform.forward.normalized/2;
                 currentBullet.GetComponent<Rigidbody>().AddForce(FireBullet.transform.forward * bulletForce, ForceMode.VelocityChange);
                 currentBullet.SendMessage("SendRay", currentBullet.transform.forward);
                 tick = 0;
+
+                GameManager.audioM.PlaySound(fireSound, transform, 1f, 20, OptionScreenScript.weaponSound);
+
             }
 
             if (Vector3.Distance(transform.position, Target.transform.position) > detectRadius || !Target.GetComponent<Collider>().enabled)
@@ -39,14 +43,17 @@ public class TurretScript : MonoBehaviour
         }
         else
         {
+            GameObject closest = null;
             foreach(Collider c in Physics.OverlapSphere(transform.position, detectRadius))
             {
                 if(c.tag == "Enemy")
                 {
-                    Target = c.gameObject;
-                    break;
+                    if (closest == null) closest = c.gameObject;
+                    else if (Vector3.Distance(transform.position, c.transform.position) < Vector3.Distance(transform.position, closest.transform.position))
+                        closest = c.gameObject;
                 }
             }
+            Target = closest;
         }
     }
 
@@ -82,5 +89,10 @@ public class TurretScript : MonoBehaviour
 
         float healthScale = (float)currentHealth / fullHealth;
         HealthPivot.localScale = new Vector3(healthScale, 1, 1);
+    }
+
+    public void ShopOnClick()
+    {
+        FindObjectOfType<ShopManager>().ItemShopOnClick(gameObject, false, 400);
     }
 }

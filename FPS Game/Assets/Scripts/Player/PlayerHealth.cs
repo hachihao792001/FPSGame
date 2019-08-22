@@ -9,7 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public GameObject uiPopupText;
     public float fullHealth, currentHealth;
     FPSController FPS;
-    public Text playerHeathText;
+    public Text playerHeathText, scoreText;
     public GameObject deadScreen, damageScreen;
 
     private void Start()
@@ -23,11 +23,16 @@ public class PlayerHealth : MonoBehaviour
     void CreateUIPopupText(string t, Color c)
     {
         GameObject created = Instantiate(uiPopupText);
-        created.transform.SetParent(FindObjectOfType<GameManager>().Playing.transform, false);
-        created.SendMessage("SetPos", new Vector3(383, -276, 0));
-        created.SendMessage("SetText", t);
-        created.SendMessage("SetColor", c);
-        created.SendMessage("SetDir", Vector2.up);
+        if(created!=null)
+            created.transform.SetParent(FindObjectOfType<GameManager>().Playing.transform, false);
+        if (created != null)
+            created.SendMessage("SetPos", new Vector3(383, -276, 0));
+        if (created != null)
+            created.SendMessage("SetText", t);
+        if (created != null)
+            created.SendMessage("SetColor", c);
+        if (created != null)
+            created.SendMessage("SetDir", Vector2.up);
     }
 
     public void WasAttacked(float damage)
@@ -56,6 +61,11 @@ public class PlayerHealth : MonoBehaviour
                 FPS.GetComponent<WeaponManager>().enabled = false;
                 FPS.enabled = false;
                 GameManager.dead = true;
+
+                float tME = GetComponent<MoneyManager>().totalMoneyEarned;
+                if (tME > PlayerPrefs.GetFloat("HighScore"))
+                    PlayerPrefs.SetFloat("HighScore", tME);
+                scoreText.text = "Score: " + tME + "\nHighScore: " + PlayerPrefs.GetFloat("HighScore");
 
                 FPS.SendMessage("PlayerDead");
             }

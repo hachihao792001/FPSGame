@@ -22,7 +22,8 @@ public class BulletScript : MonoBehaviour
         {
             GameObject hitted = hit.collider.gameObject;
             if (hitted.GetComponent<Rigidbody>() != null)
-                hitted.GetComponent<Rigidbody>().AddForce(transform.forward.normalized * 500f);
+                hitted.GetComponent<Rigidbody>().AddForceAtPosition(transform.forward.normalized * 500f, hit.point);
+
 
             if (hitted.tag == "Environment")
             {
@@ -32,7 +33,7 @@ public class BulletScript : MonoBehaviour
                 GameObject hole = Instantiate(gm.BulletHole, hit.point, holeRotation, null);
                 hole.transform.localScale = new Vector3(0.1f, 0.0001f, 0.1f);
                 hole.transform.parent = hit.collider.transform;
-                GameManager.audioM.PlayAudioObj("BulletWall", transform);
+                GameManager.audioM.PlaySound("BulletWall", transform, 1, 5, OptionScreenScript.weaponSound);
             }
             else if (hitted.tag == "Enemy")
             {

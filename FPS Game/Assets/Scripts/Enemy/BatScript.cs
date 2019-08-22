@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BatScript : MonoBehaviour
 {
+    public GameObject AppearBeam;
+    public Color ownColor;
     public GameObject Target;
 
     public bool dead = false, hitByExplosion = false;
@@ -25,9 +27,27 @@ public class BatScript : MonoBehaviour
 
     void Start()
     {
+        Spawner.add_CREL();
         PlayerBody = FindObjectOfType<FPSController>().transform.parent;
         ani = GetComponent<Animation>();
         currentHealth = fullHealth;
+
+        GameObject indi = Instantiate(FindObjectOfType<GameManager>().Indicator, PlayerBody.position, Quaternion.identity, PlayerBody);
+        indi.GetComponent<IndicatorScript>().Target = transform;
+        indi.transform.localPosition = Vector3.down * 0.7f;
+        indi.SendMessage("SetColor", ownColor);
+
+        GameObject appearBeam = Instantiate(AppearBeam, transform.position, Quaternion.identity);
+        appearBeam.GetComponent<MeshRenderer>().material.color = ownColor;
+        appearBeam.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", ownColor);
+
+        InvokeRepeating("FindNearestTarget", 0, 1);
+        InvokeRepeating("Growl", 0, 5);
+    }
+
+    void Growl()
+    {
+        GameManager.audioM.PlaySound("B" + Random.Range(1, 3).ToString(), transform, 1, 30, OptionScreenScript.enemySound);
     }
 
     void CreatePopupText(Vector3 pos, string t, Color c)
@@ -76,9 +96,11 @@ public class BatScript : MonoBehaviour
     void Die()
     {
         dead = true;
+        Spawner.minus_CREL();
         Destroy(HealthPivot.parent.gameObject);
         ani.Stop();
         GetComponent<Collider>().enabled = false;
+        GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         GetComponent<Rigidbody>().isKinematic = true;
 
         for (int i = 0; i < bodyParts.Length; i++)
@@ -114,21 +136,24 @@ public class BatScript : MonoBehaviour
         return null;
     }
 
+    void FindNearestTarget()
+    {
+        GameObject[] targets = GameObject.FindGameObjectsWithTag("PlayerSide");
+        GameObject closest = targets[0];
+        foreach (GameObject t in targets)
+        {
+            if (Vector3.Distance(transform.position, t.transform.position) < Vector3.Distance(transform.position, closest.transform.position))
+                closest = t;
+        }
+        Target = closest.transform.parent.gameObject;
+    }
+
     void Update()
     {
         if (!GameManager.playing) return;
 
-        if (Target == null)
-        {
-            GameObject[] targets = GameObject.FindGameObjectsWithTag("PlayerSide");
-            GameObject closest = targets[0];
-            foreach (GameObject t in targets)
-            {
-                if (Vector3.Distance(transform.position, t.transform.position) < Vector3.Distance(transform.position, closest.transform.position))
-                    closest = t;
-            }
-            Target = closest.transform.parent.gameObject;
-        }
+        if (transform.position.y <= -100) Die();
+        if (Target == null) FindNearestTarget();
 
         Vector3 look = Target.transform.position - transform.position;
         transform.rotation = Quaternion.LookRotation(look);
@@ -160,8 +185,11 @@ public class BatScript : MonoBehaviour
     {
         yield return new WaitForSeconds(sec);
 
-        GameObject targetNear = detectTarget(attackRange * 1.5f);
-        if (targetNear != null)
-            targetNear.SendMessage("WasAttacked", enemyDamage);
+        if (!dead)
+        {
+            GameObject targetNear = detectTarget(attackRange * 1.5f);
+            if (targetNear != null)
+                targetNear.SendMessage("WasAttacked", enemyDamage);
+        }
     }
 }

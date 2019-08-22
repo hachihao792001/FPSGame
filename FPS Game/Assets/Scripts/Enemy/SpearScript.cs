@@ -20,7 +20,7 @@ public class SpearScript : MonoBehaviour
             tick += Time.deltaTime;
             if (tick >= damageRate)
             {
-                transform.parent.SendMessage("WasAttacked", damage);
+                transform.parent.SendMessage("WasAttacked", damage, SendMessageOptions.DontRequireReceiver);
                 tick = 0;
 
                 if (!transform.parent.GetComponent<Collider>().enabled)

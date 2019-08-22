@@ -52,17 +52,17 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AtmosphereThickness: 0.9
-    - _Exposure: 1
+    - _AtmosphereThickness: 0.82
+    - _Exposure: 1.5
     - _ImageType: 0
     - _Layout: 0
     - _Mapping: 1
     - _MirrorOnBack: 0
     - _Rotation: 0
     - _SunDisk: 2
-    - _SunSize: 0.34
+    - _SunSize: 0.32
     - _SunSizeConvergence: 5
     m_Colors:
     - _GroundColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SkyTint: {r: 0.0509078, g: 0.9811321, b: 0.900192, a: 1}
+    - _SkyTint: {r: 0, g: 0.5034177, b: 0.9622642, a: 1}
     - _Tint: {r: 0, g: 1, b: 0.86193824, a: 0.5}

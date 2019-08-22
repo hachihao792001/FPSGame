@@ -23,5 +23,7 @@ public class Shock : MonoBehaviour
                 c.gameObject.SendMessage("WasAttacked", shockDamage, SendMessageOptions.DontRequireReceiver);
             }
         }
+        GameManager.audioM.PlaySound("Shock", transform, 0.5f, 30, OptionScreenScript.enemySound);
+
     }
 }

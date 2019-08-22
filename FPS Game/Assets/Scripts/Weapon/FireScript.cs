@@ -13,9 +13,7 @@ public class FireScript : MonoBehaviour
     {
         StartCoroutine(CountDownToDisppear(duration));
         transform.rotation = Quaternion.identity;
-        GameObject audio = GameManager.audioM.PlayAudioObj(fireSound, transform);
-        audio.GetComponent<AudioSource>().spatialBlend = 0.5f;
-        audio.GetComponent<AudioSource>().Play();
+        GameManager.audioM.PlaySound(fireSound, transform, 0.5f, 5, OptionScreenScript.weaponSound);
     }
 
     private void Update()

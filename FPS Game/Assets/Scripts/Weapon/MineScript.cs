@@ -34,4 +34,9 @@ public class MineScript : MonoBehaviour
         GetComponent<Collider>().enabled = true;
         transform.parent = null;
     }
+
+    public void ShopOnClick()
+    {
+        FindObjectOfType<ShopManager>().ItemShopOnClick(gameObject, false, 70);
+    }
 }

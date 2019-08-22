@@ -56,7 +56,7 @@ public class BazookaScript : Weapon
             ani.Stop(aniAttack);
             ani.Play(aniAttack);
 
-            GameManager.audioM.PlayAudioObj(attackSound, transform).GetComponent<AudioSource>().Play();
+            GameManager.audioM.PlaySound(attackSound, transform, 1, 5, OptionScreenScript.weaponSound);
 
             GameObject currentBullet = Instantiate(BazookaBullet, BulletParent);
             currentBullet.transform.rotation = FPS.transform.rotation;
@@ -84,7 +84,7 @@ public class BazookaScript : Weapon
         {
             ani.Stop();
             ani.Play(aniReload);
-            GameManager.audioM.PlayAudioObj(reloadSound, transform).GetComponent<AudioSource>().Play(); ;
+            GameManager.audioM.PlaySound(reloadSound, transform, 1, 5, OptionScreenScript.weaponSound);
 
             StartCoroutine(AfterReload());
         }

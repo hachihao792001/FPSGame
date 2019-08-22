@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ExplodingZombieScript : MonoBehaviour
 {
+    public GameObject AppearBeam;
+    public Color ownColor;
     public GameObject Target;
 
     public bool dead = false, hitByExplosion = false;
@@ -28,9 +30,27 @@ public class ExplodingZombieScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Spawner.add_CREL();
         PlayerBody = FindObjectOfType<FPSController>().transform.parent;
         ani = GetComponent<Animation>();
         currentHealth = fullHealth;
+
+        GameObject indi = Instantiate(FindObjectOfType<GameManager>().Indicator, PlayerBody.position, Quaternion.identity, PlayerBody);
+        indi.GetComponent<IndicatorScript>().Target = transform;
+        indi.transform.localPosition = Vector3.down * 0.7f;
+        indi.SendMessage("SetColor", ownColor);
+
+        GameObject appearBeam = Instantiate(AppearBeam, transform.position, Quaternion.identity);
+        appearBeam.GetComponent<MeshRenderer>().material.color = ownColor;
+        appearBeam.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", ownColor);
+
+        InvokeRepeating("FindNearestTarget", 0, 1);
+        InvokeRepeating("Growl", 0, 5);
+    }
+
+    void Growl()
+    {
+        GameManager.audioM.PlaySound("Z" + Random.Range(1, 8).ToString(), transform, 1, 5, OptionScreenScript.enemySound);
     }
 
     void CreatePopupText(Vector3 pos, string t, Color c)
@@ -48,7 +68,7 @@ public class ExplodingZombieScript : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            Die();
+            StartCoroutine(DieAndExplode());
             return;
         }
 
@@ -76,12 +96,15 @@ public class ExplodingZombieScript : MonoBehaviour
             m.SetColor("_Color", Color.white);
     }
 
-    void Die()
+    IEnumerator DieAndExplode()
     {
+        yield return new WaitForSeconds(attackDelay);
         dead = true;
+        Spawner.minus_CREL();
         Destroy(HealthPivot.parent.gameObject);
         ani.Stop();
         GetComponent<Collider>().enabled = false;
+        GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         GetComponent<Rigidbody>().isKinematic = true;
         transform.Find("EnemyHead").GetComponent<Collider>().enabled = false;
 
@@ -96,8 +119,20 @@ public class ExplodingZombieScript : MonoBehaviour
         }
 
         PlayerBody.SendMessage("GainMoney", money);
-        StartCoroutine(Explode(detectTarget(attackRange), attackDelay));
+        Instantiate(zombieExplosion, transform.position + Vector3.down, Quaternion.identity);
+
+        Instantiate(SmallZombie, transform.position + Vector3.up * 2, Quaternion.identity);
+        Instantiate(SmallZombie, transform.position + Vector3.up * 2, Quaternion.identity);
+        Instantiate(SmallZombie, transform.position + Vector3.up * 2, Quaternion.identity);
+
+        StartCoroutine(DisappearAfterDead());
         GetComponent<ExplodingZombieScript>().enabled = false;
+    }
+
+    IEnumerator DisappearAfterDead()
+    {
+        yield return new WaitForSeconds(10f);
+        Destroy(gameObject);
     }
 
     GameObject detectTarget(float range)
@@ -112,21 +147,24 @@ public class ExplodingZombieScript : MonoBehaviour
         return null;
     }
 
+    void FindNearestTarget()
+    {
+        GameObject[] targets = GameObject.FindGameObjectsWithTag("PlayerSide");
+        GameObject closest = targets[0];
+        foreach (GameObject t in targets)
+        {
+            if (Vector3.Distance(transform.position, t.transform.position) < Vector3.Distance(transform.position, closest.transform.position))
+                closest = t;
+        }
+        Target = closest.transform.parent.gameObject;
+    }
+
     void Update()
     {
         if (!GameManager.playing) return;
 
-        if (Target == null)
-        {
-            GameObject[] targets = GameObject.FindGameObjectsWithTag("PlayerSide");
-            GameObject closest = targets[0];
-            foreach (GameObject t in targets)
-            {
-                if (Vector3.Distance(transform.position, t.transform.position) < Vector3.Distance(transform.position, closest.transform.position))
-                    closest = t;
-            }
-            Target = closest.transform.parent.gameObject;
-        }
+        if (transform.position.y <= -100) StartCoroutine(DieAndExplode());
+        if (Target == null) FindNearestTarget();
 
         Vector3 look = Target.transform.position - transform.position;
         look.y = 0;
@@ -142,7 +180,7 @@ public class ExplodingZombieScript : MonoBehaviour
                 ani.Play(attackAni);
                 GetComponent<Rigidbody>().velocity = new Vector3(0, GetComponent<Rigidbody>().velocity.y, 0);
                 transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, moveSpeed * 2 * Time.deltaTime);
-                StartCoroutine(Explode(playerNear, attackDelay));
+                StartCoroutine(DieAndExplode());
             }
             else
             {
@@ -155,16 +193,12 @@ public class ExplodingZombieScript : MonoBehaviour
 
     }
 
+    /*
     IEnumerator Explode(GameObject g, float sec)
     {
         yield return new WaitForSeconds(sec);
 
-        Instantiate(zombieExplosion, transform.position+Vector3.down, Quaternion.identity);
-
-        Instantiate(SmallZombie, transform.position+Vector3.up*2, Quaternion.identity);
-        Instantiate(SmallZombie, transform.position + Vector3.up * 2, Quaternion.identity);
-        Instantiate(SmallZombie, transform.position + Vector3.up * 2, Quaternion.identity);
-
-        Destroy(gameObject);
+        
     }
+    */
 }

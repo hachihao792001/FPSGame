@@ -17,7 +17,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public GameObject PlayAudioObj(string name, Transform pr)
+    public GameObject CreateAudioObj(string name, Transform pr)
     {
         GameObject audioObj = null;
         for (int i = 0; i < sounds.Length; i++)
@@ -31,5 +31,16 @@ public class AudioManager : MonoBehaviour
                 break;
             }
         return audioObj;
+    }
+
+    public void PlaySound(string name, Transform pr, float blend, float maxDist, float volume)
+    {
+        AudioSource audio = CreateAudioObj(name, pr).GetComponent<AudioSource>();
+        audio.volume = Mathf.Min(volume, OptionScreenScript.allSound);
+        audio.spatialBlend = blend;
+        audio.rolloffMode = AudioRolloffMode.Linear;
+        audio.minDistance = 0f;
+        audio.maxDistance = maxDist;
+        audio.Play();
     }
 }

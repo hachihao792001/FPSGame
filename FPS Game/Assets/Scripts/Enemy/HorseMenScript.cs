@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class HorseMenScript : MonoBehaviour
 {
+    public GameObject AppearBeam;
+    public Color ownColor;
     public GameObject Target;
 
 	public bool dead = false, hitByExplosion = false;
@@ -28,9 +30,27 @@ public class HorseMenScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Spawner.add_CREL();
         PlayerBody = FindObjectOfType<FPSController>().transform.parent;
         ani = GetComponent<Animation>();
         currentHealth = fullHealth;
+
+        GameObject indi = Instantiate(FindObjectOfType<GameManager>().Indicator, PlayerBody.position, Quaternion.identity, PlayerBody);
+        indi.GetComponent<IndicatorScript>().Target = transform;
+        indi.transform.localPosition = Vector3.down * 0.7f;
+        indi.SendMessage("SetColor", ownColor);
+
+        GameObject appearBeam = Instantiate(AppearBeam, transform.position, Quaternion.identity);
+        appearBeam.GetComponent<MeshRenderer>().material.color = ownColor;
+        appearBeam.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", ownColor);
+
+        InvokeRepeating("FindNearestTarget", 0, 1);
+        InvokeRepeating("Neigh", 0, 5);
+    }
+
+    void Neigh()
+    {
+        GameManager.audioM.PlaySound("H" + Random.Range(1, 5).ToString(), transform, 1, 30, OptionScreenScript.enemySound);
     }
 
     void CreatePopupText(Vector3 pos, string t, Color c)
@@ -79,9 +99,11 @@ public class HorseMenScript : MonoBehaviour
     void Die()
     {
         dead = true;
+        Spawner.minus_CREL();
         Destroy(HealthPivot.parent.gameObject);
         ani.Stop();
         GetComponent<Collider>().enabled = false;
+        GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         GetComponent<Rigidbody>().isKinematic = true;
         transform.Find("EnemyHead").GetComponent<Collider>().enabled = false;
 
@@ -118,21 +140,24 @@ public class HorseMenScript : MonoBehaviour
         return null;
     }
 
+    void FindNearestTarget()
+    {
+        GameObject[] targets = GameObject.FindGameObjectsWithTag("PlayerSide");
+        GameObject closest = targets[0];
+        foreach (GameObject t in targets)
+        {
+            if (Vector3.Distance(transform.position, t.transform.position) < Vector3.Distance(transform.position, closest.transform.position))
+                closest = t;
+        }
+        Target = closest.transform.parent.gameObject;
+    }
+
     void Update()
     {
         if (!GameManager.playing) return;
 
-        if (Target == null)
-        {
-            GameObject[] targets = GameObject.FindGameObjectsWithTag("PlayerSide");
-            GameObject closest = targets[0];
-            foreach (GameObject t in targets)
-            {
-                if (Vector3.Distance(transform.position, t.transform.position) < Vector3.Distance(transform.position, closest.transform.position))
-                    closest = t;
-            }
-            Target = closest.transform.parent.gameObject;
-        }
+        if (transform.position.y <= -100) Die();
+        if (Target == null) FindNearestTarget();
 
         Vector3 look = Target.transform.position - transform.position;
         look.y = 0;
@@ -194,8 +219,11 @@ public class HorseMenScript : MonoBehaviour
     {
         yield return new WaitForSeconds(sec);
 
-        GameObject targetNear = detectTarget(stabRange * 1.5f);
-        if (targetNear != null)
-            targetNear.SendMessage("WasAttacked", stabDamage);
+        if (!dead)
+        {
+            GameObject targetNear = detectTarget(stabRange * 1.5f);
+            if (targetNear != null)
+                targetNear.SendMessage("WasAttacked", stabDamage);
+        }
     }
 }

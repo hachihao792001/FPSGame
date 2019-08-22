@@ -474,8 +474,9 @@ MonoBehaviour:
   BulletParent: {fileID: 0}
   Head: {fileID: 5746607903603241410}
   FireBullet: {fileID: 2138770950}
-  detectRadius: 10
-  rate: 0.2
+  fireSound: Turret
+  detectRadius: 20
+  rate: 0.1
   tick: 0
   damage: 10
   bulletForce: 30

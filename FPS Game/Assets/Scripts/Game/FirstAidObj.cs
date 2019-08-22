@@ -20,7 +20,7 @@ public class FirstAidObj : MonoBehaviour
     IEnumerator PickedUp(GameObject hit)
     {
         hit.SendMessage("GainHealth", 5);
-        GameManager.audioM.PlayAudioObj("FirstAidPickUp", transform).GetComponent<AudioSource>().Play();
+        GameManager.audioM.PlaySound("FirstAidPickUp", transform, 1, 5, 1);
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }

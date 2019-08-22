@@ -28,7 +28,7 @@ public class Hand : Weapon
         string currentAttackAni = attacks[Random.Range(0, attacks.Length)];
         ani.Play(currentAttackAni);
 
-        GameManager.audioM.PlayAudioObj(attackSound, transform).GetComponent<AudioSource>().Play();
+        GameManager.audioM.PlaySound(attackSound, transform, 1f, 5, OptionScreenScript.weaponSound);
 
         StartCoroutine(WaitToDealDamage(ani.GetClip(currentAttackAni).length - 0.3f));
     }
@@ -44,16 +44,16 @@ public class Hand : Weapon
             if (hitted.tag == "Enemy")
             {
                 hitted.gameObject.SendMessage("WasAttacked", damage);
-                GameManager.audioM.PlayAudioObj(hitEnemySound, transform).GetComponent<AudioSource>().Play();
+                GameManager.audioM.PlaySound(hitEnemySound, transform, 1f, 5, OptionScreenScript.weaponSound);
             }
             else if (hitted.tag == "EnemyHead")
             {
                 hitted.transform.parent.gameObject.SendMessage("WasAttacked", damage * 2);
-                GameManager.audioM.PlayAudioObj(hitEnemySound, transform).GetComponent<AudioSource>().Play();
+                GameManager.audioM.PlaySound(hitEnemySound, transform, 1f, 5, OptionScreenScript.weaponSound);
             }
             else if (rch.collider.gameObject.tag == "Environment")
             {
-                GameManager.audioM.PlayAudioObj(hitWallSound, transform).GetComponent<AudioSource>().Play();
+                GameManager.audioM.PlaySound(hitWallSound, transform, 1f, 5, OptionScreenScript.weaponSound);
 
                 Quaternion holeRotation = Quaternion.LookRotation(rch.normal, Vector3.up);
                 holeRotation = Quaternion.Euler(holeRotation.eulerAngles + Vector3.right * 90);
@@ -63,7 +63,8 @@ public class Hand : Weapon
             }
 
             Rigidbody hittedRB = hitted.GetComponent<Rigidbody>();
-            if (hittedRB != null) hittedRB.AddForce(FPS.transform.forward.normalized * handForce);
+            if (hittedRB != null)
+                hittedRB.AddForceAtPosition(FPS.transform.forward.normalized * handForce, rch.point);
         }
     }
 

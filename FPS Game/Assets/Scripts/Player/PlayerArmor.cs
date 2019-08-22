@@ -10,21 +10,23 @@ public class PlayerArmor : MonoBehaviour
 
     private void OnEnable()
     {
-        Durability = 100;
-        ArmorText.gameObject.SetActive(true);
-        ArmorText.text = "100";
+        Durability = 0;
+        ArmorText.gameObject.SetActive(false);  
+        ArmorText.text = "0";
     }
 
     public void DecreaseDurability(float d)
     {
         Durability -= d;
         ArmorText.text = Durability.ToString();
+        if (Durability > 0) ArmorText.gameObject.SetActive(true);
     }
 
     public void SetDurability(float d)
     {
         Durability = d;
         ArmorText.text = Durability.ToString();
+        if(Durability>0) ArmorText.gameObject.SetActive(true);
     }
 
     void Update()

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject Pause, PauseScreen, ShopScreen,Playing, PopupText, Canvas;
+    public GameObject Pause, PauseScreen, ShopScreen, OptionScreen, Playing, PopupText, Canvas, Indicator;
     public WeaponManager wm;
 
     public FPSController FPS;
@@ -13,19 +13,25 @@ public class GameManager : MonoBehaviour
 
     public Transform Crossair;
 
+    public static bool playing = true, shooting = false, dead = false;
+
+    public GameObject BulletHole;
+    public Transform BulletParent;
+
     private void Awake()
     {
         audioM = FindObjectOfType<AudioManager>();
         dead = false;
     }
 
-    public static bool playing = true, shooting = false, dead = false;
-
-    public GameObject BulletHole;
-    public Transform BulletParent;
+    private void Start()
+    {
+        playing = true;
+    }
 
     private void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Escape) && !dead)
         {
             Pause.SetActive(!Pause.activeSelf);
@@ -35,8 +41,11 @@ public class GameManager : MonoBehaviour
             if (Pause.activeSelf)
             {
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
                 PauseScreen.SetActive(true);
                 ShopScreen.SetActive(false);
+                OptionScreen.SetActive(false);
                 Playing.SetActive(false);
                 foreach(GameObject g in GameObject.FindGameObjectsWithTag("AudioObj"))
                     g.GetComponent<AudioSource>().Pause();
@@ -45,16 +54,30 @@ public class GameManager : MonoBehaviour
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+
                 Playing.SetActive(true);
                 foreach (GameObject g in GameObject.FindGameObjectsWithTag("AudioObj"))
-                    g.GetComponent<AudioSource>().Play();
+                {
+                    if (g.GetComponent<AudioSource>().clip.name != "Cash" && g.GetComponent<AudioSource>().clip.name != "Wrong")
+                        g.GetComponent<AudioSource>().Play();
+                }
             }
         }
 
-        if (dead) Cursor.lockState = CursorLockMode.None;
+        if (dead)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 	
 	public void ReplayOnClick(){
-		SceneManager.LoadScene(0);
-	}
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void MenuOnClick()
+    {
+        SceneManager.LoadScene(0);
+    }
 }

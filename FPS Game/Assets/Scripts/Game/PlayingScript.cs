@@ -31,6 +31,9 @@ public class PlayingScript : MonoBehaviour
                 wm.weaponInSlot[Sender.GetComponent<Weapon>().type] = Sender.GetComponent<Weapon>();
                 wm.ChangeToSlot(Sender.GetComponent<Weapon>().type);
             }
+        }else if(ActionDidInShop == "BuyEmergency")
+        {
+            FindObjectOfType<EmergencyScript>().doIt = true;
         }
 
         Sender = null;
